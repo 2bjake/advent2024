@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "adventutilities",
-      "kind" : "localSourceControl",
-      "location" : "/Users/jakefoster/workspace/advent/AdventUtilities",
-      "state" : {
-        "branch" : "main",
-        "revision" : "d58e771016c230f481594c879d2b198fd35b5778"
-      }
-    },
-    {
       "identity" : "swift-algorithms",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-algorithms",

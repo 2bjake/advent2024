@@ -1,29 +1,12 @@
 import Algorithms
+import AdventUtilities
 import RegexBuilder
-
-//func parseLine(_ s: any StringProtocol) -> (Int, Int) {
-//  let nums = s.split(separator: "   ")
-//  return (Int(nums[0])!, Int(nums[1])!)
-//}
-
-//func makeLists(from src: String) -> ([Int], [Int]) {
-//  src
-//    .split(separator: "\n").map(parseLine)
-//    .reduce(into: ([Int](), [Int]())) { result, value in
-//      result.0.append(value.0)
-//      result.1.append(value.1)
-//    }
-//}
-
-let intCapture = Capture {
-  OneOrMore(.digit)
-} transform: { Int($0)! }
 
 func makeLists(from src: String) -> ([Int], [Int]) {
   let regex = Regex {
-    intCapture
+    Capture.int
     "   "
-    intCapture
+    Capture.int
   }
 
   return src.matches(of: regex).reduce(into: ([Int](), [Int]())) { result, value in
