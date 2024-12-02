@@ -17,7 +17,6 @@ func makeLists(from src: String) -> ([Int], [Int]) {
 
 public func partOne() {
   let (list1, list2) = makeLists(from: input)
-
   let sum = zip(list1.sorted(), list2.sorted()).map { abs($0.0 - $0.1) }.reduce(0, +)
   print(sum) // 2970687
 }
