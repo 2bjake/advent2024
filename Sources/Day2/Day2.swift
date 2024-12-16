@@ -14,19 +14,7 @@ func isSafe(increasing: Bool, first: Int, second: Int) -> Bool {
   return increasing == isIncreasing(first, second) && diff >= 1 && diff <= 3
 }
 
-func isSafe(_ nums: [Int]) -> Bool {
-  let pairs = nums.adjacentPairs()
-  let firstIsIncreasing = isIncreasing(pairs.first!.0, pairs.first!.1)
-
-  for pair in pairs {
-    if !isSafe(increasing: firstIsIncreasing, first: pair.0, second: pair.1) {
-      return false
-    }
-  }
-  return true
-}
-
-func isSafeDampened(_ nums: [Int]) -> Bool {
+func isSafe(_ nums: [Int], useDamper: Bool = false) -> Bool {
   let pairs = Array(nums.adjacentPairs())
   let firstIsIncreasing = isIncreasing(pairs.first!.0, pairs.first!.1)
 
@@ -35,7 +23,7 @@ func isSafeDampened(_ nums: [Int]) -> Bool {
   while i < pairs.count {
     let pair = pairs[i]
     if !isSafe(increasing: firstIsIncreasing, first: pair.0, second: pair.1) {
-      if dampenerUsed { return false }
+      if !useDamper || dampenerUsed { return false }
       dampenerUsed = true
       i += 1
 
@@ -51,7 +39,7 @@ func isSafeDampened(_ nums: [Int]) -> Bool {
 }
 
 func isSafeWithDamper(_ nums: [Int]) -> Bool {
-  if isSafeDampened(nums) { return true }
+  if isSafe(nums, useDamper: true) { return true }
 
   var nums = nums
   let first = nums.removeFirst()
@@ -65,7 +53,7 @@ func isSafeWithDamper(_ nums: [Int]) -> Bool {
 }
 
 public func partOne() {
-  print(makeLists(input).count(where: isSafe)) //663
+  print(makeLists(input).count { isSafe($0) }) //663
 }
 
 public func partTwo() {
