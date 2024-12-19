@@ -1,4 +1,4 @@
-import Day11
+import Day15
 import AdventUtilities
 
 @main
@@ -7,7 +7,8 @@ struct Runner {
     partOne()
     partTwo()
 
-    //printMillisElapsed("partOne", for: partOne)
+//    printMillisElapsed("partOne", for: partOne)
+//    printMillisElapsed("partOneAgain", for: partOne)
     //printAvgMillisElapsed("partTwo", runTimes: 100, for: partTwo)
   }
 
