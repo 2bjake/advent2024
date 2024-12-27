@@ -20,10 +20,20 @@ func makeGrid(size: Int, byteString: String, byteCount: Int) -> (grid: [[Charact
   return (grid, positions.dropFirst(byteCount))
 }
 
-func findShortestPath(from start: Position, to goal: Position, in grid: [[Character]], wall: Character) -> Int? {
-  // uses astar
+// uses astar to find the shortest path (includes start and goal positions, so the path length is 1 less than the number of positions)
+func findShortestPath(from start: Position, to goal: Position, in grid: [[Character]], wall: Character) -> [Position]? {
   func h(_ pos: Position) -> Int {
     abs(pos.row - goal.row) + abs(pos.col - goal.col)
+  }
+
+  func buildPath() -> [Position] {
+    var current = goal
+    var path = [goal]
+    while let next = cameFrom[current] {
+      path.append(next)
+      current = next
+    }
+    return Array(path.reversed())
   }
 
   var openSet: Set<Position> = [start]
@@ -32,20 +42,10 @@ func findShortestPath(from start: Position, to goal: Position, in grid: [[Charac
   var gScore = [start: 0]
   var fScore = [start: h(start)]
 
-  func stepCount(_ from: Position) -> Int {
-    var current = from
-    var totalPath = [current]
-    while let next = cameFrom[current] {
-      totalPath.append(next)
-      current = next
-    }
-    return totalPath.count - 1
-  }
-
   while !openSet.isEmpty {
-    let current = openSet.min { fScore[$0]! < fScore[$1]! }!
+    let current = openSet.min { fScore[$0]! < fScore[$1]! }! // this isn't terribly efficient, could be better with a MinQueue
     if current == goal {
-      return stepCount(current)
+      return buildPath()
     }
     openSet.remove(current)
 
@@ -66,17 +66,24 @@ func findShortestPath(from start: Position, to goal: Position, in grid: [[Charac
 
 public func partOne() {
   let (grid, _) = makeGrid(size: 71, byteString: input, byteCount: 1024)
-  let result = findShortestPath(from: Position(0, 0), to: Position(70, 70), in: grid, wall: "#")
-  print(result!) // 364
+  let result = findShortestPath(from: Position(0, 0), to: Position(70, 70), in: grid, wall: "#")!.count
+  print(result - 1) // 364
 }
 
 public func partTwo() {
   var (grid, bytes) = makeGrid(size: 71, byteString: input, byteCount: 1024)
 
-  var curByte: Position
-  repeat {
-    curByte = bytes.removeFirst()
-    grid[curByte] = "#"
-  } while findShortestPath(from: Position(0, 0), to: Position(70, 70), in: grid, wall: "#") != nil
-  print(curByte)
+  var shortestPath = findShortestPath(from: Position(0, 0), to: Position(70, 70), in: grid, wall: "#")
+
+  while let path = shortestPath {
+    let byte = bytes.removeFirst()
+    grid[byte] = "#"
+    if path.contains(byte) {
+      guard let newPath = findShortestPath(from: Position(0, 0), to: Position(70, 70), in: grid, wall: "#") else {
+        print("\(byte.col),\(byte.row)") // 52,28
+        break
+      }
+      shortestPath = newPath
+    } // else this byte didn't affect the current shortest path, move along
+  }
 }

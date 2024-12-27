@@ -122,7 +122,7 @@ public func partOne() {
 public func partTwo() {
   //let program = [0,3,5,4,3,0]
   let program = [2,4,1,5,7,5,4,5,0,3,1,6,5,5,3,0]
-  for i in 100_000_000...200_000_000 { // run it for higher numbers
+  for i in 800_000_000...1_000_000_000 { // run it for higher numbers
     var machine = Machine(regA: i, regB: 0, regC: 0, program: program)
     if let result = machine.run(failOnMismatch: true), result == program {
       print(i)
